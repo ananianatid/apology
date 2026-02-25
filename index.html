@@ -218,6 +218,36 @@
       <svg class="heart" viewBox="0 0 60 60"><path d="M30 54s-18-12.6-18-25.2C12 17.2 19.2 10 30 20.8 40.8 10 48 17.2 48 28.8 48 41.4 30 54 30 54z" fill="#FF85A1"/></svg>
       <div class="big serif">Astrid... mon monde</div>
       <div class="subtitle">j'ai quelque chose à te dire</div>
+      <div class="swipe-hint">
+        <span class="swipe-text">Swipe à droite</span>
+        <span class="swipe-arrow">→</span>
+      </div>
+        .swipe-hint {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 2.5em;
+          opacity: 0.7;
+          animation: fadeIn 1.5s 1.2s both;
+          user-select: none;
+        }
+        .swipe-text {
+          font-size: 1rem;
+          color: #888;
+          font-family: var(--sans);
+          margin-bottom: 0.2em;
+          letter-spacing: 0.04em;
+        }
+        .swipe-arrow {
+          font-size: 2.1rem;
+          color: var(--pink2);
+          animation: arrowMove 1.2s infinite cubic-bezier(.77,0,.18,1);
+          margin-top: -0.2em;
+        }
+        @keyframes arrowMove {
+          0%, 100% { transform: translateX(0); opacity: 0.7; }
+          50% { transform: translateX(18px); opacity: 1; }
+        }
     </div>
     <div class="slide" data-idx="1">
       <div class="serif" style="animation: fadeIn 2.2s 0.3s both;">Je sais que j'ai mal agi.</div>
