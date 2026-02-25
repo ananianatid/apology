@@ -202,6 +202,39 @@
       background: var(--pink2);
       border-color: var(--pink2);
     }
+    /* Swipe indicator */
+    .swipe-hint {
+      position: absolute;
+      bottom: 8vh;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+      color: #fff8;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      letter-spacing: 0.03em;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.5s;
+      z-index: 8;
+    }
+    .swipe-hint.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .swipe-arrow {
+      display: inline-block;
+      animation: swipeHint 2s ease-in-out infinite;
+    }
+    .swipe-arrow:nth-child(1) { animation-delay: 0s; }
+    .swipe-arrow:nth-child(2) { animation-delay: 0.2s; }
+    .swipe-arrow:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes swipeHint {
+      0%, 100% { transform: translateX(0); opacity: 0.5; }
+      50% { transform: translateX(6px); opacity: 1; }
+    }
     /* Hide scrollbars */
     ::-webkit-scrollbar { display: none; }
     /* Responsive font */
@@ -244,6 +277,9 @@
       <div id="confetti"></div>
     </div>
     <div class="progress" id="progress"></div>
+    <div class="swipe-hint" id="swipeHint">
+      <span class="swipe-arrow">→</span><span class="swipe-arrow">→</span><span class="swipe-arrow">→</span>
+    </div>
   </div>
   <script>
     // --- SLIDE LOGIC ---
@@ -296,6 +332,7 @@
         if(dx < 0 && current < slides.length-1) current++;
         else if(dx > 0 && current > 0) current--;
         showSlide(current, dx<0?1:-1);
+        document.getElementById('swipeHint').classList.add('hidden');
       }
       startX = startY = null;
     });
