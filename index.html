@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lettre d'excuse</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Lato:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --pink1: #FFB6C1;
+      --pink2: #FF85A1;
+      --white1: #FFFFFF;
+      --white2: #FAF7F7;
+      --blue1: #AEC6E8;
+      --blue2: #C9DFEF;
+      --serif: 'Playfair Display', serif;
+      --sans: 'Lato', 'Inter', Arial, sans-serif;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      background: var(--white2);
+      font-family: var(--sans);
+      overflow: hidden;
+    }
+    body {
+      min-height: 100vh;
+      min-width: 100vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, var(--pink1) 0%, var(--blue2) 100%);
+    }
+    .slider {
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+      touch-action: pan-y;
+      background: transparent;
+    }
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      position: absolute;
+      top: 0; left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s cubic-bezier(.77,0,.18,1);
+      z-index: 1;
+      background: transparent;
+    }
+    .slide.active {
+      opacity: 1;
+      pointer-events: auto;
+      z-index: 2;
+      animation: fadeIn 1.2s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    .slide-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+      transition: background 0.7s;
+    }
+    /* Slide-specific backgrounds */
+    .slide-bg.s1 { background: linear-gradient(135deg, var(--pink1), var(--blue2)); }
+    .slide-bg.s2 { background: linear-gradient(120deg, var(--white2), var(--pink2)); }
+    .slide-bg.s3 { background: linear-gradient(120deg, var(--pink2), var(--blue1)); }
+    .slide-bg.s4 { background: linear-gradient(120deg, var(--blue2), var(--white1)); }
+    .slide-bg.s5 { background: linear-gradient(135deg, var(--pink1), var(--white2)); }
+    .slide-bg.s6 { background: linear-gradient(135deg, var(--blue1), var(--pink2)); }
+    .slide-bg.s7 { background: linear-gradient(135deg, var(--white1), var(--blue2)); }
+    /* Text styles */
+    .serif {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      color: #d94f7b;
+      text-align: center;
+      margin-bottom: 0.7em;
+      letter-spacing: 0.01em;
+    }
+    .sans {
+      font-family: var(--sans);
+      font-size: 1.1rem;
+      color: #444;
+      text-align: center;
+      margin-bottom: 0.7em;
+    }
+    .big {
+      font-size: 2.7rem;
+      font-family: var(--serif);
+      color: #d94f7b;
+      font-weight: 700;
+      margin-bottom: 0.5em;
+    }
+    .subtitle {
+      font-size: 1.1rem;
+      color: #888;
+      font-family: var(--sans);
+      margin-top: 0.5em;
+      letter-spacing: 0.04em;
+    }
+    /* Heart and petal animations */
+    .heart {
+      width: 60px; height: 60px;
+      display: block;
+      margin: 0 auto 1.2em auto;
+      animation: heartBeat 2.5s infinite cubic-bezier(.77,0,.18,1);
+    }
+    @keyframes heartBeat {
+      0%, 100% { transform: scale(1); }
+      10% { transform: scale(1.08); }
+      20% { transform: scale(0.98); }
+      30% { transform: scale(1.05); }
+      50% { transform: scale(1.12); }
+      70% { transform: scale(0.97); }
+      80% { transform: scale(1.04); }
+    }
+    .broken-heart {
+      width: 48px; height: 48px;
+      margin-bottom: 1em;
+      position: relative;
+      animation: fadeIn 1.5s;
+    }
+    .broken-heart .left, .broken-heart .right {
+      position: absolute;
+      top: 0; width: 50%; height: 100%;
+      transition: transform 1.2s cubic-bezier(.77,0,.18,1);
+    }
+    .broken-heart .left {
+      left: 0;
+      animation: breakLeft 1.2s forwards;
+    }
+    .broken-heart .right {
+      right: 0;
+      animation: breakRight 1.2s forwards;
+    }
+    @keyframes breakLeft {
+      0% { transform: translateX(0); }
+      40% { transform: translateX(-10px) rotate(-8deg); }
+      100% { transform: translateX(0); }
+    }
+    @keyframes breakRight {
+      0% { transform: translateX(0); }
+      40% { transform: translateX(10px) rotate(8deg); }
+      100% { transform: translateX(0); }
+    }
+    .healing {
+      animation: healHeart 1.2s 1.2s forwards;
+    }
+    @keyframes healHeart {
+      from { filter: grayscale(1); opacity: 0.7; }
+      to { filter: grayscale(0); opacity: 1; }
+    }
+    .floating {
+      position: absolute;
+      pointer-events: none;
+      opacity: 0.7;
+      animation: floatPetal 7s linear infinite;
+    }
+    @keyframes floatPetal {
+      0% { transform: translateY(0) scale(1); opacity: 0.7; }
+      80% { opacity: 0.8; }
+      100% { transform: translateY(-60vh) scale(1.2); opacity: 0; }
+    }
+    .pulse {
+      animation: pulse 1.7s infinite cubic-bezier(.77,0,.18,1);
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+    /* Progress dots */
+    .progress {
+      position: absolute;
+      bottom: 2.5vh;
+      left: 0; right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 0.7em;
+      z-index: 10;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: #fff6;
+      border: 1.5px solid #fff;
+      transition: background 0.3s, border 0.3s;
+    }
+    .dot.active {
+      background: var(--pink2);
+      border-color: var(--pink2);
+    }
+    /* Hide scrollbars */
+    ::-webkit-scrollbar { display: none; }
+    /* Responsive font */
+    @media (max-width: 600px) {
+      .serif, .big { font-size: 1.5rem; }
+      .subtitle { font-size: 1rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="slider" id="slider">
+    <div class="slide-bg s1"></div>
+    <div class="slide active" data-idx="0">
+      <svg class="heart" viewBox="0 0 60 60"><path d="M30 54s-18-12.6-18-25.2C12 17.2 19.2 10 30 20.8 40.8 10 48 17.2 48 28.8 48 41.4 30 54 30 54z" fill="#FF85A1"/></svg>
+      <div class="big serif">[SON_PRÉNOM]...</div>
+      <div class="subtitle">j'ai quelque chose à te dire</div>
+    </div>
+    <div class="slide" data-idx="1">
+      <div class="serif" style="animation: fadeIn 2.2s 0.3s both;">Je sais que j'ai mal agi.</div>
+    </div>
+    <div class="slide" data-idx="2">
+      <div class="broken-heart">
+        <svg class="left" viewBox="0 0 48 48"><path d="M24 44S4 32 4 20C4 10 16 4 24 16" fill="#FFB6C1"/></svg>
+        <svg class="right healing" viewBox="0 0 48 48"><path d="M24 44S44 32 44 20C44 10 32 4 24 16" fill="#FFB6C1"/></svg>
+      </div>
+      <div class="serif" style="animation: fadeIn 2.2s 0.7s both;">Ce que j'ai fait n'était pas bien, et tu mérites mieux que ça.</div>
+    </div>
+    <div class="slide" data-idx="3">
+      <div class="serif" style="animation: fadeIn 2.2s 0.3s both;">Je pense à toi, à nous, et je réalise à quel point tu comptes pour moi.</div>
+      <div id="floaters"></div>
+    </div>
+    <div class="slide" data-idx="4">
+      <div class="big serif" style="animation: fadeIn 2.2s 0.3s both;">Je suis vraiment désolé(e),<br>[SON_PRÉNOM].<br><span style="font-size:1.2rem;">Du fond du cœur.</span></div>
+    </div>
+    <div class="slide" data-idx="5">
+      <div class="serif pulse" style="animation: fadeIn 2.2s 0.3s both;">Est-ce qu'on peut recommencer&nbsp;?</div>
+    </div>
+    <div class="slide" data-idx="6">
+      <div class="serif" style="animation: fadeIn 2.2s 0.3s both;">Avec tout mon amour,<br>[MON_PRÉNOM] 💙🩷</div>
+      <div id="confetti"></div>
+    </div>
+    <div class="progress" id="progress"></div>
+  </div>
+  <script>
+    // --- SLIDE LOGIC ---
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const bgs = [
+      's1','s2','s3','s4','s5','s6','s7'
+    ];
+    const slider = document.getElementById('slider');
+    let current = 0;
+    function showSlide(idx, dir=0) {
+      slides.forEach((s, i) => {
+        s.classList.toggle('active', i === idx);
+      });
+      // Background
+      document.querySelectorAll('.slide-bg').forEach(bg => bg.remove());
+      const bg = document.createElement('div');
+      bg.className = 'slide-bg ' + bgs[idx];
+      slider.insertBefore(bg, slider.firstChild);
+      // Progress
+      updateProgress(idx);
+      // Floating petals (slide 4)
+      if(idx === 3) spawnFloaters();
+      else document.getElementById('floaters')?.replaceChildren();
+      // Confetti (slide 7)
+      if(idx === 6) spawnConfetti();
+      else document.getElementById('confetti')?.replaceChildren();
+    }
+    // --- PROGRESS DOTS ---
+    function updateProgress(idx) {
+      const progress = document.getElementById('progress');
+      progress.innerHTML = '';
+      for(let i=0; i<slides.length; ++i) {
+        const dot = document.createElement('div');
+        dot.className = 'dot' + (i===idx?' active':'');
+        progress.appendChild(dot);
+      }
+    }
+    // --- SWIPE LOGIC ---
+    let startX = null, startY = null;
+    slider.addEventListener('touchstart', e => {
+      if(e.touches.length !== 1) return;
+      startX = e.touches[0].clientX;
+      startY = e.touches[0].clientY;
+    });
+    slider.addEventListener('touchend', e => {
+      if(startX === null) return;
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if(Math.abs(dx) > 40 && Math.abs(dx) > Math.abs(dy)) {
+        if(dx < 0 && current < slides.length-1) current++;
+        else if(dx > 0 && current > 0) current--;
+        showSlide(current, dx<0?1:-1);
+      }
+      startX = startY = null;
+    });
+    // Keyboard navigation (for desktop)
+    document.addEventListener('keydown', e => {
+      if(e.key === 'ArrowRight' && current < slides.length-1) { current++; showSlide(current, 1); }
+      if(e.key === 'ArrowLeft' && current > 0) { current--; showSlide(current, -1); }
+    });
+    // Click progress dots
+    document.getElementById('progress').addEventListener('click', e => {
+      if(e.target.classList.contains('dot')) {
+        const idx = Array.from(e.target.parentNode.children).indexOf(e.target);
+        current = idx;
+        showSlide(current);
+      }
+    });
+    // --- FLOATING PETALS/HEARTS ---
+    function spawnFloaters() {
+      const floaters = document.getElementById('floaters');
+      floaters.innerHTML = '';
+      for(let i=0; i<7; ++i) {
+        const el = document.createElement('div');
+        el.className = 'floating';
+        el.style.left = (10 + Math.random()*80) + 'vw';
+        el.style.bottom = (-10 + Math.random()*10) + 'vh';
+        el.style.animationDelay = (Math.random()*2) + 's';
+        el.style.animationDuration = (6+Math.random()*3) + 's';
+        el.innerHTML = Math.random() > 0.5 ?
+          `<svg width="22" height="22" viewBox="0 0 22 22"><path d="M11 20S2 14 2 8.5C2 4 7 2 11 7c4-5 9-3 9 1.5C20 14 11 20 11 20z" fill="#FFB6C1"/></svg>` :
+          `<svg width="18" height="18" viewBox="0 0 18 18"><ellipse cx="9" cy="9" rx="7" ry="3.5" fill="#AEC6E8" opacity=".7"/></svg>`;
+        floaters.appendChild(el);
+      }
+    }
+    // --- CONFETTI/PETALS ---
+    function spawnConfetti() {
+      const confetti = document.getElementById('confetti');
+      confetti.innerHTML = '';
+      for(let i=0; i<18; ++i) {
+        const el = document.createElement('div');
+        el.className = 'floating';
+        el.style.left = (5 + Math.random()*90) + 'vw';
+        el.style.bottom = (-10 + Math.random()*10) + 'vh';
+        el.style.animationDelay = (Math.random()*2) + 's';
+        el.style.animationDuration = (5+Math.random()*4) + 's';
+        el.innerHTML = Math.random() > 0.5 ?
+          `<svg width="16" height="16" viewBox="0 0 16 16"><ellipse cx="8" cy="8" rx="7" ry="3.5" fill="#FFB6C1" opacity=".7"/></svg>` :
+          `<svg width="14" height="14" viewBox="0 0 14 14"><ellipse cx="7" cy="7" rx="6" ry="2.5" fill="#AEC6E8" opacity=".7"/></svg>`;
+        confetti.appendChild(el);
+      }
+    }
+    // --- INIT ---
+    showSlide(current);
+  </script>
+</body>
+</html>
