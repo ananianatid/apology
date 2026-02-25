@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pour toi...</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap" rel="stylesheet">
+
+    <style>
+        /* Color Palette & Variables */
+        :root {
+            --pink-light: #FFB6C1;
+            --pink-dark: #FF85A1;
+            --white-pure: #FFFFFF;
+            --white-soft: #FAF7F7;
+            --blue-light: #AEC6E8;
+            --blue-dark: #C9DFEF;
+            --text-dark: #4A4A4A;
+        }
+
+        /* Base Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100vw;
+            height: 100vh;
+            overflow: hidden;
+            font-family: 'Lato', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--white-soft);
+        }
+
+        h1, h2, .serif {
+            font-family: 'Playfair Display', serif;
+            font-weight: 500;
+        }
+
+        /* Slider Layout */
+        .slider-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+            will-change: transform;
+        }
+
+        .slide {
+            flex: 0 0 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 10vw;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Slide Backgrounds */
+        #slide-1 { background: linear-gradient(135deg, var(--white-soft), var(--pink-light)); }
+        #slide-2 { background: linear-gradient(135deg, var(--white-pure), var(--blue-light)); }
+        #slide-3 { background: linear-gradient(135deg, var(--white-soft), var(--blue-dark)); }
+        #slide-4 { background: linear-gradient(135deg, var(--pink-light), var(--white-pure)); }
+        #slide-5 { background: linear-gradient(135deg, var(--white-soft), var(--pink-dark)); color: white; }
+        #slide-6 { background: linear-gradient(135deg, var(--blue-light), var(--pink-light)); }
+        #slide-7 { background: linear-gradient(135deg, var(--white-pure), var(--pink-dark)); }
+
+        #slide-5 { color: white; text-shadow: 1px 2px 5px rgba(0,0,0,0.1); }
+
+        /* Typography */
+        .slide h1 { font-size: 2.5rem; margin-bottom: 15px; opacity: 0; }
+        .slide p { font-size: 1.2rem; line-height: 1.6; font-weight: 300; opacity: 0; }
+        
+        .slide.active h1, .slide.active p {
+            animation: fadeInUp 1.2s ease forwards;
+        }
+        
+        .slide.active p { animation-delay: 0.6s; }
+
+        /* Slide 2 Specific */
+        #slide-2 h2 {
+            font-size: 2.2rem;
+            opacity: 0;
+        }
+        #slide-2.active h2 {
+            animation: fadeInSlow 2.5s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(30px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInSlow {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        /* Floating Heart (Slide 1) */
+        .beating-heart {
+            font-size: 3rem;
+            margin: 20px 0;
+            opacity: 0;
+        }
+        #slide-1.active .beating-heart {
+            animation: pulseHeart 2s infinite, fadeInUp 1s ease forwards;
+            animation-delay: 0.3s;
+        }
+
+        @keyframes pulseHeart {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+            100% { transform: scale(1); }
+        }
+
+        /* Broken to Healing Heart (Slide 3) */
+        .healing-container {
+            position: relative;
+            height: 80px;
+            width: 80px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 4rem;
+        }
+        .heart-icon {
+            position: absolute;
+            opacity: 0;
+            transition: opacity 2s ease;
+        }
+        #slide-3.active .broken { animation: showThenHide 4s forwards; animation-delay: 0.5s; }
+        #slide-3.active .whole { animation: hideThenShow 4s forwards; animation-delay: 0.5s; }
+
+        @keyframes showThenHide {
+            0% { opacity: 0; transform: scale(0.8); }
+            20% { opacity: 1; transform: scale(1); }
+            80% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.1); }
+        }
+        @keyframes hideThenShow {
+            0% { opacity: 0; transform: scale(0.9); }
+            80% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Floating Petals/Elements (Slide 4 & 7) */
+        .petals-container {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+        .petal {
+            position: absolute;
+            bottom: -50px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50% 50% 0 50%;
+            transform: rotate(45deg);
+            opacity: 0;
+        }
+        #slide-7 .petal { background: rgba(255, 255, 255, 0.8); }
+        
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(45deg) scale(0.8); opacity: 0; }
+            20% { opacity: 0.8; }
+            80% { opacity: 0.8; }
+            100% { transform: translateY(-110vh) rotate(360deg) scale(1.2); opacity: 0; }
+        }
+
+        /* Pulse Text (Slide 6) */
+        .pulse-text { opacity: 0; }
+        #slide-6.active .pulse-text {
+            animation: fadeInUp 1s forwards, gentlePulse 3s infinite;
+            animation-delay: 0s, 1s;
+        }
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.8; }
+        }
+
+        /* Slide Content Z-Index */
+        .content { z-index: 2; position: relative; }
+
+        /* Progress Dots */
+        .dots {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.15);
+            transition: all 0.4s ease;
+        }
+        .dot.active {
+            background: var(--pink-dark);
+            transform: scale(1.4);
+        }
+
+        /* Instructions Overlay */
+        .swipe-instruction {
+            position: absolute;
+            bottom: 60px;
+            font-size: 0.8rem;
+            color: rgba(0,0,0,0.4);
+            animation: pulseHeart 2s infinite;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container" id="slider">
+        
+        <div class="slide" id="slide-1">
+            <div class="content">
+                <h1>[SON_PRÉNOM]...</h1>
+                <div class="beating-heart">🤍</div>
+                <p>j'ai quelque chose à te dire</p>
+            </div>
+            <div class="swipe-instruction">glisse vers la gauche ➔</div>
+        </div>
+
+        <div class="slide" id="slide-2">
+            <div class="content">
+                <h2>Je sais que j'ai mal agi.</h2>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-3">
+            <div class="content">
+                <div class="healing-container">
+                    <div class="heart-icon broken">💔</div>
+                    <div class="heart-icon whole">❤️‍🩹</div>
+                </div>
+                <h2 style="font-size: 1.8rem; line-height: 1.4;">Ce que j'ai fait n'était pas bien,<br>et tu mérites mieux que ça.</h2>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-4">
+            <div class="petals-container" id="petals-4"></div>
+            <div class="content">
+                <h2 style="font-size: 1.8rem; line-height: 1.5;">Je pense à toi, à nous, et je réalise à quel point tu comptes pour moi.</h2>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-5">
+            <div class="content">
+                <h1 style="font-size: 2.5rem; line-height: 1.3;">Je suis vraiment désolé(e),<br>[SON_PRÉNOM].</h1>
+                <p style="font-size: 1.4rem; font-style: italic; margin-top: 15px;">Du fond du cœur.</p>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-6">
+            <div class="content pulse-text">
+                <h1 style="font-size: 2.2rem;">Est-ce qu'on peut recommencer ?</h1>
+            </div>
+        </div>
+
+        <div class="slide" id="slide-7">
+            <div class="petals-container" id="petals-7"></div>
+            <div class="content">
+                <h2 style="font-size: 2rem; margin-bottom: 10px;">Avec tout mon amour,</h2>
+                <h1 style="font-size: 2.5rem; color: var(--pink-dark);">[MON_PRÉNOM] 💙🩷</h1>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="dots" id="dots-container"></div>
+
+    <script>
+        // --- Slider Logic ---
+        const slider = document.getElementById('slider');
+        const slides = document.querySelectorAll('.slide');
+        const dotsContainer = document.getElementById('dots-container');
+        let currentSlide = 0;
+
+        // Create Dots
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if(index === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        });
+        const dots = document.querySelectorAll('.dot');
+
+        function updateSlider() {
+            // Move slider
+            slider.style.transform = `translateX(-${currentSlide * 100}vw)`;
+            
+            // Update dots
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+
+            // Trigger animations by toggling 'active' class
+            slides.forEach((slide, index) => {
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    // Slight delay before removing active to allow smooth transition out
+                    setTimeout(() => slide.classList.remove('active'), 800);
+                }
+            });
+        }
+
+        // --- Swipe Detection (Mobile + Desktop fallback) ---
+        let startX = 0;
+        let endX = 0;
+        let isDragging = false;
+
+        // Touch Events (Mobile)
+        document.addEventListener('touchstart', e => {
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', e => {
+            endX = e.changedTouches[0].clientX;
+            handleSwipe();
+        });
+
+        // Mouse Events (Desktop testing)
+        document.addEventListener('mousedown', e => {
+            isDragging = true;
+            startX = e.clientX;
+        });
+
+        document.addEventListener('mouseup', e => {
+            if(!isDragging) return;
+            isDragging = false;
+            endX = e.clientX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const threshold = 50; // Minimum distance to trigger a swipe
+            if (startX - endX > threshold && currentSlide < slides.length - 1) {
+                // Swipe Left (Next)
+                currentSlide++;
+                updateSlider();
+            } else if (endX - startX > threshold && currentSlide > 0) {
+                // Swipe Right (Prev)
+                currentSlide--;
+                updateSlider();
+            }
+        }
+
+        // --- Floating Petals Generator ---
+        function createPetals(containerId, count) {
+            const container = document.getElementById(containerId);
+            for (let i = 0; i < count; i++) {
+                let petal = document.createElement('div');
+                petal.classList.add('petal');
+                
+                // Randomize size, position, and animation timing
+                let size = Math.random() * 15 + 10; // 10px to 25px
+                petal.style.width = `${size}px`;
+                petal.style.height = `${size}px`;
+                petal.style.left = `${Math.random() * 100}vw`;
+                
+                let duration = Math.random() * 4 + 4; // 4s to 8s
+                let delay = Math.random() * 5; // 0s to 5s
+                
+                petal.style.animation = `floatUp ${duration}s infinite linear ${delay}s`;
+                
+                container.appendChild(petal);
+            }
+        }
+
+        // Initialize elements
+        createPetals('petals-4', 15);
+        createPetals('petals-7', 25);
+        
+        // Trigger first slide animations on load
+        setTimeout(() => slides[0].classList.add('active'), 100);
+
+    </script>
+</body>
+</html>
